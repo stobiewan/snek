@@ -14,6 +14,7 @@ runner.run = async (output_dir) => {
     const multifab = await dapp._types.Multifab.deploy()
     const contracts = {}
     fs.readdirSync(output_dir).filter((f) => f.endsWith('.snek')).forEach(async(file) => {
+        // TODO: This will be replaced by new json output
         const [abi, bytecode] = fs.readFileSync(`${output_dir}/${file}`, {encoding: 'utf-8'}).split("\n")
         const cache_tx = await send(multifab.cache, bytecode);
         [,codehash] = cache_tx.events.find(event => event.event === 'Added').args
