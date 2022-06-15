@@ -32,7 +32,7 @@ const make = (path, output_dir) => {
 const test = (src_path, test_path, output_dir) => {
     make(src_path, output_dir)
     make(test_path, output_dir)
-    runner.run()
+    runner.run(output_dir)
 }
 
 program.parse();
