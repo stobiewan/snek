@@ -1,4 +1,5 @@
 const { Command } = require('commander')
+const fs = require('fs');
 const program = new Command()
 
 const vyper = require('./src/vyper.js')
@@ -21,6 +22,13 @@ program.command('test')
     .argument('[test_path]', 'path to test files', 'test/')
     .action((src_path, test_path) => { test(src_path, test_path, program.opts().outputDir) })
 
+program.command('clean')
+    .description('Remove compiled snek files')
+    .argument('[src_path]', 'path to vyper source file(s) to compile', 'src/')
+    .argument('[test_path]', 'path to test files', 'test/')
+    .action(() => { fs.rmSync(program.opts().outputDir, {recursive: true, force: true})})
+
+
 program.command('help')
     .description('print a long help message with examples')
     .action(() => { console.log('snek uses vyper to compile contracts, you need to install it with pip first') })
@@ -32,7 +40,7 @@ const make = (path, output_dir) => {
 const test = (src_path, test_path, output_dir) => {
     make(src_path, output_dir)
     make(test_path, output_dir)
-    runner.run()
+    runner.run(output_dir)
 }
 
 program.parse();
